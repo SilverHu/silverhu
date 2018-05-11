@@ -60,7 +60,7 @@ public class NioClient {
 				Thread.sleep(5000);
 			}
 		} catch (IOException e) {
-			System.out.println("connect confuse");
+			System.out.println("connect refuse");
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
