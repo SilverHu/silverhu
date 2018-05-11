@@ -9,7 +9,7 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
-import java.util.Set;
+import java.util.Iterator;
 
 /**
  * select应用，服务端
@@ -75,44 +75,39 @@ public class NioServer {
 	 * @throws IOException
 	 */
 	public void handler() throws IOException {
-		while (selector.select() > 0) {
-			Set<SelectionKey> keys = selector.selectedKeys();
-			for (SelectionKey key : keys) {
+		while (true) {
+			if (selector.select() > 0) {
+				Iterator<SelectionKey> it = selector.selectedKeys().iterator();
+				while (it.hasNext()) {
+					SelectionKey selectionKey = it.next();
+					// 删除已选择的key
+					it.remove();
+					if (selectionKey.isAcceptable()) {
+						// 准备接收客户端连接
+						System.out.println("ready accept please from client");
+						SocketChannel channel = ((ServerSocketChannel) selectionKey.channel()).accept();
 
-				// 删除已选择的key
-				selector.selectedKeys().remove(key);
-
-				if (key.isAcceptable()) {
-					// 准备接收客户端连接
-					System.out.println("ready accept please from client");
-					SocketChannel channel = ((ServerSocketChannel) key.channel()).accept();
-
-					// 注册监控写请求
-					channel.configureBlocking(false);
-					channel.register(selector, SelectionKey.OP_READ);
-					key.interestOps(SelectionKey.OP_ACCEPT);
-				} else if (key.isReadable()) {
-					// 读数据
-					System.out.println("start to read");
-					SocketChannel channel = (SocketChannel) key.channel();
-					String content = read(channel);
-					System.out.println("server content : " + content);
-
-					// 继续读取下一次
-					key.interestOps(SelectionKey.OP_READ);
-
-					// 写入
-					if (content.length() > 0) {
-						for (SelectionKey selectionKey : selector.keys()) {
-							if (selectionKey.channel() instanceof SocketChannel) {
-								SocketChannel sc = (SocketChannel) selectionKey.channel();
-								sc.write(charset.encode(content));
-							}
+						// 注册监控写请求
+						channel.configureBlocking(false);
+						channel.register(selector, SelectionKey.OP_READ);
+					} else if (selectionKey.isReadable()) {
+						// 读数据
+						System.out.println("start to read");
+						SocketChannel channel = (SocketChannel) selectionKey.channel();
+						try {
+							String content = read(channel);
+							System.out.println("server content : " + content);
+						} catch (IOException e) {
+							System.out.println("closed connect");
+							channel.close();
+							e.printStackTrace();
 						}
 					}
 				}
 			}
+
 		}
+
 	}
 
 	/**
@@ -125,7 +120,10 @@ public class NioServer {
 	public String read(SocketChannel channel) throws IOException {
 		String content = "";
 		ByteBuffer bf = ByteBuffer.allocate(1024);
-		int mark = channel.read(bf);
+		int mark;
+
+		mark = channel.read(bf);
+
 		while (mark > 0) {
 			bf.flip();
 			content += charset.decode(bf).toString();
