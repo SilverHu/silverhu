@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * 底层抽象接口
  * 
- * @author chuanyinhu
+ * @author SilverHu
  *
  */
 @Entity

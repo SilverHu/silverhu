@@ -3,7 +3,7 @@ package com.example;
 /**
  * 指令重排
  * 
- * @author chuanyinhu
+ * @author SilverHu
  *
  */
 public class OperationReordering {
