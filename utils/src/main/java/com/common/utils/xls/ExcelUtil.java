@@ -24,7 +24,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.common.utils.file.FileUtils;
+import com.common.utils.file.FileUtil;
 
 /**
  * excel工具类
@@ -34,7 +34,7 @@ import com.common.utils.file.FileUtils;
  */
 public class ExcelUtil {
 
-	private final static Logger log = LoggerFactory.getLogger(FileUtils.class);
+	private final static Logger log = LoggerFactory.getLogger(FileUtil.class);
 	private final static String DEFAULT_SHEETNAME = "Sheet1";
 
 	public static ExcelBean readExcel(File excel, String sheetName) {
@@ -163,7 +163,7 @@ public class ExcelUtil {
 
 		// 存在则删除
 		if (excelBean.getExcel().exists()) {
-			FileUtils.removeFile(excelBean.getExcel());
+			FileUtil.removeFile(excelBean.getExcel());
 		}
 
 		try (OutputStream out = new FileOutputStream(excelBean.getExcel());

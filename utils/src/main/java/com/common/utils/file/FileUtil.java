@@ -31,10 +31,10 @@ import org.slf4j.LoggerFactory;
  * @dependency org.apache.poi 3.14
  * 
  */
-public class FileUtils {
-	private final static Logger log = LoggerFactory.getLogger(FileUtils.class);
+public class FileUtil {
+	private final static Logger log = LoggerFactory.getLogger(FileUtil.class);
 
-	private FileUtils() {
+	private FileUtil() {
 
 	}
 
@@ -136,7 +136,7 @@ public class FileUtils {
 		try {
 			// create RAR file
 			File zip = new File(rarFile);
-			FileUtils.createFile(zip);
+			FileUtil.createFile(zip);
 
 			// create ZipOutupStream
 			outFile = new FileOutputStream(zip);
@@ -144,7 +144,7 @@ public class FileUtils {
 
 			// package
 			for (File file : files) {
-				FileUtils.packOneFile(outZip, file, null);
+				FileUtil.packOneFile(outZip, file, null);
 			}
 		} catch (IOException e) {
 			log.error("Park files with ZIP filed!", e);
@@ -236,7 +236,7 @@ public class FileUtils {
 
 			/* create file */
 			File saveFile = new File(savePath);
-			FileUtils.createFile(saveFile);
+			FileUtil.createFile(saveFile);
 
 			/* upload file */
 			out = new FileOutputStream(saveFile);
