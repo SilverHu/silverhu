@@ -1,5 +1,5 @@
 package com.common.utils.response;
 
 public enum ResponseCode {
-	SUCCESS, ERROR_400
+    SUCCESS, ERROR_400
 }

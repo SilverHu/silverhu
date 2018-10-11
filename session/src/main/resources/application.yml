@@ -1,0 +1,24 @@
+# shrio会话共享配置
+session:
+  globalSessionTimeout: 3600000
+  cookieId: JESSIONID
+  cookiePath: /
+  # 客户端配置
+  client:
+    shiro:
+      loginUrl: http://localhost:8080/authority/login
+      successUrl: http://localhost:8080/authority/
+      unauthorizedUrl: http://localhost:8080/authority/unauthorized
+  # redis会话配置
+  redis: 
+    host: localhost
+    port: 6379
+
+spring:
+  jmx: 
+    enabled: false
+    
+  # 时区
+  jackson: 
+    time-zone: GMT+8
+

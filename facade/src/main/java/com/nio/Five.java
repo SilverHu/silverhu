@@ -13,23 +13,23 @@ import java.nio.channels.FileChannel;
  */
 public class Five {
 
-	public static void main(String[] args) {
-		Five five = new Five();
-		five.transfer();
-	}
+    public static void main(String[] args) {
+        Five five = new Five();
+        five.transfer();
+    }
 
-	public void transfer() {
-		try (FileInputStream ins = new FileInputStream("D:/1.jpg");
-				FileOutputStream outs = new FileOutputStream("D:/3.jpg");
-				FileChannel infc = ins.getChannel();
-				FileChannel outfc = outs.getChannel()) {
-			outfc.transferFrom(infc, 0, infc.size());
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-		}
-	}
+    public void transfer() {
+        try (FileInputStream ins = new FileInputStream("D:/1.jpg");
+                FileOutputStream outs = new FileOutputStream("D:/3.jpg");
+                FileChannel infc = ins.getChannel();
+                FileChannel outfc = outs.getChannel()) {
+            outfc.transferFrom(infc, 0, infc.size());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+        }
+    }
 
 }

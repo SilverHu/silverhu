@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silverhu.authority.repository.SysRoleDao">
+    <resultMap id="BaseResultMap" type="com.silverhu.authority.entity.SysRole">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+    </resultMap>
+    
+    <sql id="Base_Column_List">
+        id, 
+        name
+    </sql>
+    
+    <sql id="pageable">
+        <if test="pageable != null">
+            limit #{pageable.start},#{pageable.size}
+        </if>
+    </sql>
+    
+    <sql id="Order_By">
+    </sql>
+    
+     <sql id="Condition">
+        <if test="condition != null">
+            <if test="condition.name != null">
+                and sys_role.id = #{condition.id}
+            </if>
+            <if test="condition.name != null and condition.name != ''">
+                and sys_role.name like concat("%",#{condition.name},"%")
+            </if>
+        </if>
+    </sql>
+    
+    <insert id="add" parameterType="com.silverhu.authority.entity.SysRole" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_role (
+            id, 
+            name
+        ) values (
+            #{id}, 
+            #{name}
+        )
+    </insert>
+    
+    <update id="update" parameterType="com.silverhu.authority.entity.SysRole">
+        update sys_role set 
+            name = #{name}
+        where id = #{id}
+    </update>
+    
+    <delete id="deleteById" parameterType="java.lang.Long" >
+        delete from sys_role where id = #{id}
+    </delete>
+    
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select <include refid="Base_Column_List" /> from sys_role where sys_role.id = #{id}
+    </select>
+    
+    <select id="findOne" resultMap="BaseResultMap" parameterType="com.silverhu.authority.entity.SysRole">
+        select <include refid="Base_Column_List" /> from sys_role
+        <where>
+            <include refid="Condition"/>
+        </where>
+        limit 0,1
+        <include refid="Order_By" />
+    </select>
+    
+    <select id="findByCondition" resultMap="BaseResultMap" parameterType="com.silverhu.authority.entity.SysRole">
+        select <include refid="Base_Column_List" /> from sys_role
+        <where>
+            <include refid="Condition"/>
+        </where>
+        <include refid="Order_By" />
+        <include refid="pageable" />
+    </select>
+    
+    <select id="findCount" resultType="java.lang.Integer">
+        select count(*) from sys_role 
+        <where>
+            <include refid="Condition" />
+        </where>
+    </select>
+    
+    <insert id="addPermissionRelation">
+        <if test="id != null and list != null">
+            insert into sys_relation_role_permission (
+                roleid, 
+                permissionid
+            ) values 
+            <foreach collection='list' item='entity' separator=','>
+            (
+                #{id}, 
+                #{entity.id}
+            )
+            </foreach>
+        </if>
+    </insert>
+    
+    <delete id="deletePermissionRelation" parameterType="java.lang.Long" >
+        delete from sys_relation_role_permission where roleid = #{id}
+    </delete>
+</mapper>

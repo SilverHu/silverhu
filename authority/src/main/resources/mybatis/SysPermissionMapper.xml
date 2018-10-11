@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silverhu.authority.repository.SysPermissionDao">
+    <resultMap id="BaseResultMap" type="com.silverhu.authority.entity.SysPermission">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="parentid" property="parentid" jdbcType="BIGINT" />
+        <result column="permission" property="permission" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="TINYINT" />
+    </resultMap>
+    
+    <sql id="Order_By">
+    </sql>
+    
+    <sql id="Base_Column_List" >
+        id, 
+        name, 
+        parentid, 
+        permission, 
+        type
+    </sql>
+    
+    <sql id="Condition">
+        <if test="condition != null">
+            <if test="condition.id != null">
+                and sys_permission.id = #{condition.id}
+            </if>
+            <if test="condition.name != null and condition.name != ''">
+                and sys_permission.name = #{condition.name}
+            </if>
+            <if test="condition.parentid != null">
+                and sys_permission.parentid = #{condition.parentid}
+            </if>
+            <if test="condition.permission != null and condition.permission != ''">
+                and sys_permission.permission = #{condition.permission}
+            </if>
+            <if test="condition.type != null">
+                and sys_permission.type = #{condition.type}
+            </if>
+        </if>
+    </sql>
+    
+    <insert id="add" parameterType="com.silverhu.authority.entity.SysPermission" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_permission (
+            name, 
+            parentid, 
+            permission, 
+            type
+        ) values (
+            #{name}, 
+            #{parentid}, 
+            #{permission}, 
+            #{type}
+        )
+    </insert>
+  
+    <update id="update" parameterType="com.silverhu.authority.entity.SysPermission" >
+        update sys_permission set 
+            name = #{name},
+            parentid = #{parentid},
+            permission = #{permission},
+            type = #{type}
+        where id = #{id}
+    </update>
+    
+    <delete id="deleteById" parameterType="java.lang.Long" >
+        delete from sys_permission where id = #{id}
+    </delete>
+    
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select <include refid="Base_Column_List" /> from sys_permission where id = #{id}
+        <include refid="Order_By" />
+    </select>
+    
+    <select id="findOne" resultMap="BaseResultMap" parameterType="com.silverhu.authority.entity.SysPermission">
+        select <include refid="Base_Column_List" /> from sys_permission
+        <where>
+            <include refid="Condition"/>
+        </where>
+        limit 0,1
+        <include refid="Order_By" />
+    </select>
+    
+    <select id="findByCondition" resultMap="BaseResultMap" parameterType="com.silverhu.authority.entity.SysPermission">
+        select <include refid="Base_Column_List" /> from sys_permission
+        <where>
+            <include refid="Condition"/>
+        </where>
+        <include refid="Order_By" />
+    </select>
+</mapper>

@@ -8,7 +8,7 @@ package com.leetcode;
  *
  */
 public class Five {
-	public String longestPalindrome(String s) {
-		return null;
-	}
+    public String longestPalindrome(String s) {
+        return null;
+    }
 }

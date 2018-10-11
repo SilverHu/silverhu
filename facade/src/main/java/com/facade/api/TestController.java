@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
-	@RequestMapping("/")
-	public Object index(){
-		return "你好";
-	}
+    @RequestMapping("/")
+    public Object index(){
+        return "你好";
+    }
 }

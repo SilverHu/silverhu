@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silverhu.authority.repository.SysUserDao">
+	<resultMap id="BaseResultMap" type="com.silverhu.authority.entity.SysUser">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="username" property="username" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="BIT" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+	    id, 
+        username, 
+        password, 
+        name, 
+        email, 
+        companyid, 
+        status
+	</sql>
+	
+	<sql id="pageable">
+        <if test="pageable != null">
+            limit #{pageable.start},#{pageable.size}
+        </if>
+    </sql>
+	
+	<sql id="Order_By">
+	</sql>
+    
+    <sql id="Condition">
+        <if test="condition != null">
+            <if test="condition.username != null and condition.username != ''">
+                and sys_user.username like concat("%",#{condition.username},"%")
+            </if>
+            <if test="condition.password != null and condition.password != ''">
+                and sys_user.password = #{condition.password}
+            </if>
+            <if test="condition.name != null and condition.name != ''">
+                and sys_user.name = #{condition.name}
+            </if>
+            <if test="condition.email != null and condition.email != ''">
+                and sys_user.email = #{condition.email}
+            </if>
+            <if test="condition.status != null">
+                and sys_user.status = #{condition.status}
+            </if>
+        </if>
+    </sql>
+    
+	<insert id="add" parameterType="com.silverhu.authority.entity.SysUser" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_user (
+            username, 
+            password,
+            name, 
+            email, 
+            companyid,
+            status
+        ) values (
+            #{username},
+            #{password},
+            #{name}, 
+            #{email}, 
+            #{companyid},
+            #{status}
+        )
+    </insert>
+    
+    <update id="update" parameterType="com.silverhu.authority.entity.SysUser">
+        update sys_user set 
+            username = #{username},
+            password = #{password},
+            name = #{name},
+            email = #{email},
+            companyid = #{companyid},
+            status = #{status}
+        where id = #{id}
+    </update>
+    
+    <delete id="deleteById" parameterType="java.lang.Long" >
+	    delete from sys_user where id = #{id}
+    </delete>
+    
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select <include refid="Base_Column_List" /> from sys_user
+        where sys_user.id = #{id}
+        <include refid="Order_By" />
+    </select>
+  
+    <select id="findOne" resultMap="BaseResultMap" parameterType="com.silverhu.authority.entity.SysUser">
+        select <include refid="Base_Column_List" /> from sys_user
+	        <where>
+	            <include refid="Condition"/>
+	        </where>
+	        limit 0,1
+	    <include refid="Order_By" />
+    </select>
+    
+    <select id="findByCondition" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" /> from sys_user 
+        <where>
+            <include refid="Condition"/>
+        </where>
+        <include refid="Order_By" />
+        <include refid="pageable" />
+    </select>
+    
+    <select id="findCount" resultType="java.lang.Integer">
+        select count(*) from sys_user 
+        <where>
+            <include refid="Condition" />
+        </where>
+    </select>
+    
+     <insert id="addRoleRelation">
+        <if test="id != null and list != null">
+            insert into sys_relation_user_role (
+	            userid, 
+	            roleid
+	        ) values 
+	        <foreach collection='list' item='entity' separator=','>
+	        (
+	            #{id}, 
+	            #{entity.id}
+	        )
+	        </foreach>
+        </if>
+    </insert>
+    
+    <insert id="addPermissionRelation">
+        <if test="id != null and list != null">
+            insert into sys_relation_user_permission (
+                userid, 
+                permissionid
+            ) values 
+            <foreach collection='list' item='entity' separator=','>
+            (
+                #{id}, 
+                #{entity.id}
+            )
+            </foreach>
+        </if>
+    </insert>
+    
+    <delete id="deleteRoleRelation" parameterType="java.lang.Long" >
+        delete from sys_relation_user_role where userid = #{id}
+    </delete>
+    
+    <delete id="deletePermissionRelation" parameterType="java.lang.Long" >
+        delete from sys_relation_user_permission where userid = #{id}
+    </delete>
+</mapper>
