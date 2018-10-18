@@ -35,7 +35,7 @@ public interface SysRoleDao {
 
     SysRole findById(Long id);
 
-    SysRole findOne(@Param("condition") SysRole entity);
+    SysRole findOne(@Param("condition") SysRole condition);
 
     List<SysRole> findByCondition(@Param("condition") SysRole condition, @Param("pageable") Pageable pageable);
 

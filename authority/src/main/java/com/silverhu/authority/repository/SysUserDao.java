@@ -19,7 +19,7 @@ public interface SysUserDao {
 
     SysUser findById(Long id);
 
-    SysUser findOne(@Param("condition") SysUser sysUser);
+    SysUser findOne(@Param("condition") SysUser condition);
 
     List<SysUser> findByCondition(@Param("condition") SysUser condition, @Param("pageable") Pageable pageable);
 
